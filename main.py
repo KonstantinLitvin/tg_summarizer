@@ -2,7 +2,7 @@ import asyncio
 import yaml
 from telethon import TelegramClient, events
 from telethon import functions, types
-
+from datetime import datetime as dt
 
 def read_creds():
     with open('creds.yaml') as f:
@@ -40,6 +40,9 @@ async def get_crypt_content(client):
 async def run():
     test_user = 'kekuev'
 
+    since_time = dt(2023, 5, 22)
+
+
     async with TelegramClient('anon', **read_creds()) as client:
         # client.loop.run_until_complete(client.send_message('kekuev', 'Hello'))
 
@@ -53,15 +56,15 @@ async def run():
 
                 if entity.broadcast:
 
-                    if entity.title in {'CryptoEarn Important', 'BlockSide'}:
+                    if entity.title in {'CryptoEarn Important', 'BlockSide', 'Gagarin Crypto'}:
 
-                        msgs = await client.get_messages(entity.id, 3)
+                        msgs = await client.get_messages(entity.id, offset_date=since_time, reverse = True, limit=10)
 
                         for msg in msgs:
-                            print(entity.title)
+                            print(entity.title, msg.date)
                             # print(msgs[0].text)
                             print(msg.message)
-                            print()
+                            print('\n\n<=============================>\n\n')
 
 
 
@@ -78,8 +81,9 @@ async def run():
             #     print(dg)
 
 
-# TODO: get list of channels
-# TODO: get data from this channels for the last day
+
+# TODO: forward to saved
+
 
 if __name__ == '__main__':
     asyncio.run(run())
