@@ -4,6 +4,7 @@ from telethon import TelegramClient, events
 from telethon import functions, types
 from datetime import datetime as dt
 
+
 def read_creds():
     with open('creds.yaml') as f:
         return yaml.load(f, Loader=yaml.SafeLoader)
@@ -40,14 +41,16 @@ async def get_crypt_content(client):
 async def run():
     test_user = 'kekuev'
 
+    forward = False
     since_time = dt(2023, 5, 22)
-
 
     async with TelegramClient('anon', **read_creds()) as client:
         # client.loop.run_until_complete(client.send_message('kekuev', 'Hello'))
 
         async with client:
             # msgs = await client.get_messages('cryptoboy1017', 10)
+
+            my_chat = await client.get_me()
 
             # print(msgs)
 
@@ -58,16 +61,15 @@ async def run():
 
                     if entity.title in {'CryptoEarn Important', 'BlockSide', 'Gagarin Crypto'}:
 
-                        msgs = await client.get_messages(entity.id, offset_date=since_time, reverse = True, limit=10)
+                        msgs = await client.get_messages(entity.id, offset_date=since_time, reverse=True, limit=3)
 
                         for msg in msgs:
+                            if forward:
+                                await client.forward_messages(my_chat, msg)
                             print(entity.title, msg.date)
                             # print(msgs[0].text)
                             print(msg.message)
                             print('\n\n<=============================>\n\n')
-
-
-
 
             # Do you have a conversation open with them? Get dialogs.
             # dgs = await client.get_dialogs()
@@ -81,8 +83,6 @@ async def run():
             #     print(dg)
 
 
-
-# TODO: forward to saved
 
 
 if __name__ == '__main__':
