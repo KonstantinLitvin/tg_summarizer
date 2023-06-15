@@ -42,7 +42,7 @@ async def run():
     test_user = 'kekuev'
 
     forward = False
-    since_time = dt(2023, 5, 22)
+    since_time = dt(2023, 6, 14)
 
     async with TelegramClient('anon', **read_creds()) as client:
         # client.loop.run_until_complete(client.send_message('kekuev', 'Hello'))
