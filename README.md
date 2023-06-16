@@ -6,6 +6,7 @@ Create *Crypt* folder in your tg app and move your target groups/channels there
 Put into creds.yaml credentials for tg account:
 
 api_id: ***
+
 api_hash: ***
 
 More info:
