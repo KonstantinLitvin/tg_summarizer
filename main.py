@@ -30,19 +30,13 @@ async def get_content(client):
 
 
 async def run(since):
-    test_user = 'kekuev'
-
     forward = False
 
     async with TelegramClient('anon', **read_creds()) as client:
-        # client.loop.run_until_complete(client.send_message('kekuev', 'Hello'))
 
         async with client:
-            # msgs = await client.get_messages('cryptoboy1017', 10)
 
             my_chat = await client.get_me()
-
-            # print(msgs)
 
             for id_ in await get_content(client):
                 entity = await client.get_entity(id_)
@@ -57,20 +51,8 @@ async def run(since):
                             if forward:
                                 await client.forward_messages(my_chat, msg)
                             print(entity.title, msg.date)
-                            # print(msgs[0].text)
                             print(msg.message)
                             print('\n\n<=============================>\n\n')
-
-            # Do you have a conversation open with them? Get dialogs.
-            # dgs = await client.get_dialogs()
-            # for dg in dgs:
-            #
-            # if not dg.is_group and dg.is_channel:
-
-            # print(dg.title)
-            # print()
-            # if dg.entity.broadcast:
-            #     print(dg)
 
 
 if __name__ == '__main__':
