@@ -1,8 +1,7 @@
 import asyncio
 import yaml
-from telethon import TelegramClient, events
-from telethon import functions, types
 from datetime import datetime as dt
+from telethon import TelegramClient, functions
 
 
 def read_creds():
@@ -10,26 +9,18 @@ def read_creds():
         return yaml.load(f, Loader=yaml.SafeLoader)
 
 
-# @client.on(events.NewMessage(chats='cardboty'))
-# async def my_event_handler(event):
-#     print(event.message.message)
-
-
-# client.start()
-# client.run_until_disconnected()
-
-async def get_crypt_content(client):
+async def get_content(client):
     """
     get ids of entities in crypt telegram folder
     """
 
-    folder_name = 'Crypt'.lower()
+    telegram_dir = 'Crypt'.lower()
 
     result = await client(functions.messages.GetDialogFiltersRequest())
 
     ids = set()
     for df in result:
-        if (df := df.to_dict())['_'] == 'DialogFilter' and df['title'].lower() == folder_name:
+        if (df := df.to_dict())['_'] == 'DialogFilter' and df['title'].lower() == telegram_dir:
 
             for item in df['pinned_peers'] + df['include_peers']:
                 if item['_'] == 'InputPeerChannel':
@@ -38,11 +29,10 @@ async def get_crypt_content(client):
     return ids
 
 
-async def run():
+async def run(since):
     test_user = 'kekuev'
 
     forward = False
-    since_time = dt(2023, 6, 14)
 
     async with TelegramClient('anon', **read_creds()) as client:
         # client.loop.run_until_complete(client.send_message('kekuev', 'Hello'))
@@ -54,14 +44,14 @@ async def run():
 
             # print(msgs)
 
-            for id_ in await get_crypt_content(client):
+            for id_ in await get_content(client):
                 entity = await client.get_entity(id_)
 
-                if entity.broadcast:
+                if entity.broadcast:  # get only channels
 
-                    if entity.title in {'CryptoEarn Important', 'BlockSide', 'Gagarin Crypto'}:
+                    if entity.title in {'CryptoEarn Important', 'BlockSide', 'Gagarin Crypto'}:  # filter some entities
 
-                        msgs = await client.get_messages(entity.id, offset_date=since_time, reverse=True, limit=3)
+                        msgs = await client.get_messages(entity.id, offset_date=since, reverse=True, limit=3)
 
                         for msg in msgs:
                             if forward:
@@ -83,7 +73,6 @@ async def run():
             #     print(dg)
 
 
-
-
 if __name__ == '__main__':
-    asyncio.run(run())
+    since_time = dt(2023, 6, 14)
+    asyncio.run(run(since_time))
