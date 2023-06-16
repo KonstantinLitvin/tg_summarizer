@@ -1,7 +1,10 @@
 # tg_summarizer
+A small project that help to fetch data from different telegram groups/channels as self-bot using telethon
 
+Create *Crypt* folder in your tg app and move your target groups/channels there
 
 Put into creds.yaml credentials for tg account:
+
 api_id: ***
 api_hash: ***
 
